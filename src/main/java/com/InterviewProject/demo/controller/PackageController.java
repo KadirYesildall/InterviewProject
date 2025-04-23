@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,11 +70,26 @@ public class PackageController {
         }
     }
 
+    @GetMapping("/{packageName}/{version}/{fileName}")
     public ResponseEntity<?> downloadPackage(
             @PathVariable String packageName,
             @PathVariable String version,
             @PathVariable String fileName){
+        try {
+            String filePath = packageName + "/" + version + "/" + fileName;
+            Resource file = storageService.loadAsResource(filePath);
 
-        return ResponseEntity.ok("Download endpoint successful");
+            if (file.exists()){
+                return ResponseEntity.ok()
+                        .header("Content-Disposition", "attachment; filename=\"" + file.getFilename() + "/")
+                        .body(file);
+            }
+            else {
+                return ResponseEntity.notFound().build();
+            }
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Failed to download !" + e.getMessage());
+        }
     }
 }
