@@ -5,8 +5,11 @@ import com.InterviewProject.demo.model.PackageEntity;
 import com.InterviewProject.demo.repository.PackageRepository;
 import com.InterviewProject.demo.storage.StorageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -24,6 +28,8 @@ public class PackageController {
     private final StorageService storageService;
     private final ObjectMapper objectMapper;
     private final PackageRepository packageRepository;
+    @Autowired
+    private Validator validator;
 
     @Value("${storage.strategy}")
     private String strategy;
@@ -50,6 +56,13 @@ public class PackageController {
 
             String json = new String(metaFile.getBytes(), StandardCharsets.UTF_8);
             MetaDataDTO metaDataDTO = objectMapper.readValue(json, MetaDataDTO.class);
+
+            Set<ConstraintViolation<MetaDataDTO>> violations = validator.validate(metaDataDTO);
+            if (!violations.isEmpty()) {
+                StringBuilder errors = new StringBuilder();
+                violations.forEach(v -> errors.append(v.getMessage()).append("; "));
+                return ResponseEntity.badRequest().body("Invalid meta.json: " + errors);
+            }
 
             PackageEntity packageEntity = new PackageEntity();
             packageEntity.setPackageName(packageName);
