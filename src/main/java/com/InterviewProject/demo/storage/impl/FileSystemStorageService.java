@@ -4,6 +4,7 @@ import com.InterviewProject.demo.storage.StorageService;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,7 @@ import java.nio.file.StandardCopyOption;
 @Getter
 @Setter
 @Service
-@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(
-        value = "storage.strategy", havingValue = "file-system")
+@ConditionalOnProperty(value = "storage.strategy", havingValue = "file-system")
 public class FileSystemStorageService implements StorageService {
 
     @Value("${storage.file.base-path:uploads/}")
