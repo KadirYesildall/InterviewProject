@@ -1,8 +1,7 @@
-package com.InterviewProject.demo.storage.impl;
+package com.InterviewProject.demo.storage.object;
 
 import com.InterviewProject.demo.storage.StorageService;
 import io.minio.*;
-import io.minio.errors.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;

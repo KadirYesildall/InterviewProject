@@ -1,0 +1,8 @@
+    {
+        "name": "mypackage",
+        "version": "1.0.0",
+        "author": "John Doe",
+        "dependencies": [
+            {"packageName": "std", "version": "1.0.0"}
+        ]
+    }

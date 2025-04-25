@@ -1,4 +1,4 @@
-package com.InterviewProject.demo.storage.impl;
+package com.InterviewProject.demo.storage.filesystem;
 
 import com.InterviewProject.demo.storage.StorageService;
 import lombok.Getter;
