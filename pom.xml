@@ -180,6 +180,12 @@
 			</build>
 		</profile>
 	</profiles>
+	<repositories>
+		<repository>
+			<id>repsy</id>
+			<url>https://repo.repsy.io/mvn/kadir/repsy-java-libs</url>
+		</repository>
+	</repositories>
 
 	<distributionManagement>
 		<repository>
